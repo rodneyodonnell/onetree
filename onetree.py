@@ -87,9 +87,9 @@ def print_tree(node, depth=0):
     elif node.__class__ is Tree:
         for split, child in zip(node.splits, node.children):
             if child.__class__ is Leaf:
-                print '%s(%s < %s) -> %s' % (indent, split.feature, split.max, child.value)
+                print '%s(%s <= %s) -> %s' % (indent, split.feature, split.max, child.value)
             else:
-                print '%s(%s < %s)' % (indent, split.feature, split.max)
+                print '%s(%s <= %s)' % (indent, split.feature, split.max)
                 print_tree(child, depth + 1)
     elif node.__class__ is Forest:
         for i, tree in enumerate(node.trees):
