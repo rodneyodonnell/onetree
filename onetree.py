@@ -194,7 +194,7 @@ def merge_buckets(splits, children, bucketize_fn):
     return ret_splits, ret_children
 
 
-def simplify(forest, bucketize_fn=None):
+def simplify(forest, bucketize_fn=None, depth=0):
     """Recursively simplify forest into a single tree."""
     weighted_splits = list(get_weighted_splits(forest))
 
@@ -204,7 +204,14 @@ def simplify(forest, bucketize_fn=None):
 
     # Turn forest into a tree, where each child is a forest.
     splits = find_best_split(weighted_splits)
-    children = [simplify(filter_by_split(forest, split), bucketize_fn)
+    if depth < 5:
+        print '\ndepth', depth
+        print 'weighted_splits ', len(weighted_splits)
+        print '\n'.join(map(str, weighted_splits[:10]))
+        print 'splits', len(splits)
+        print '\n'.join((map(str, splits[:10])))
+
+    children = [simplify(filter_by_split(forest, split), bucketize_fn, depth + 1)
                 for split in splits]
 
     splits, children = merge_buckets(splits, children, bucketize_fn)
