@@ -2,9 +2,11 @@
 
 ## Implemented approaches
 
- - greedy_by_runtime
+ - greedy_by_runtime:
+   Greedily remove variable which saves us the largest expected runtime per
+   item.  This hits combinational explosion very quickly for large forests.
 
-## Alternative approach
+## Alternative approach 2 - Split on common vars.
 
 An alternative (not implemented yet) is to modify step 1 to instead find a
 split point which results in the minumum growth in tree size.  E.g., If there
@@ -33,33 +35,15 @@ NOTE: This code is mostly untested and has only been used on toy problems so far
       but could hit combinaitonal issues based on forest topology, etc.
 """
 
-from onetree_common import Forest, Leaf
-from onetree_common import make_tree, print_tree
+from onetree_common import print_tree
 
 import simplify_greedy_runtime
 
 
 def main():
     '''main(), just build & test for now.'''
-    # Sample forest, roughtly as a result of predicting 'Y = X_1'.
-    _tree1 = make_tree('X_1', [.5], [Leaf(0.25), Leaf(0.75)])
-    _tree2 = make_tree('X_1', [.5], [Leaf(0.30), Leaf(0.90)])
-    _tree3 = make_tree('X_2', [.5], [
-        make_tree('X_3', [.5], [Leaf(0.35), Leaf(0.75)]),
-        Leaf(0.45)])
-    _tree4 = Leaf(0.45)
-    _tree5 = make_tree('X_3', [.5], [Leaf(0.30), Leaf(0.90)])
-    _tree6 = make_tree('X_3', [.4, .6], [_tree1, _tree2, _tree3])
-    _tree7 = make_tree('X_3', [.4, .6], [_tree6, _tree1, _tree6])
-    _forest = Forest([_tree1,
-                      _tree2,
-                      _tree3,
-                      _tree4,
-                      _tree5,
-                      _tree5,
-                      _tree6,
-                      _tree7,
-                      make_tree('X_1', [.2, .3], [Leaf(.1), Leaf(.25), Leaf(.65)])])
+    from onetree_common_test import make_small_test_forest
+    _forest = make_small_test_forest()
 
     print('\n## Full Tree')
     print_tree(_forest)
@@ -70,7 +54,6 @@ def main():
     print('\n## Simplified with buckets')
     bucket_size = 0.1
     print_tree(simplify_greedy_runtime.simplify(_forest, lambda x: int(x / bucket_size) * bucket_size))
-
 
 if __name__ == '__main__':
     main()
