@@ -1,6 +1,5 @@
 '''Simplify strategy which attempts to maximally reduce runtime at every step.
 
-
 ## Implemented approach
 
 The approach implemented here is:
@@ -120,11 +119,11 @@ def simplify(forest, bucketize_fn=None, depth=0):
     # Turn forest into a tree, where each child is a forest.
     splits = find_best_split(weighted_splits)
     if depth < 6:
-        print '\ndepth', depth
-        print 'weighted_splits ', len(weighted_splits)
-        print '\n'.join(str(s) for s in weighted_splits[:10])
-        print 'splits', len(splits)
-        print '\n'.join((str(s) for s in splits[:10]))
+        print('\ndepth', depth)
+        print('weighted_splits ', len(weighted_splits))
+        print('\n'.join(str(s) for s in weighted_splits[:10]))
+        print('splits', len(splits))
+        print('\n'.join((str(s) for s in splits[:10])))
 
     children = [simplify(filter_by_split(forest, split), bucketize_fn, depth + 1)
                 for split in splits]

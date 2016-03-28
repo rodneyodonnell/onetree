@@ -33,8 +33,6 @@ NOTE: This code is mostly untested and has only been used on toy problems so far
       but could hit combinaitonal issues based on forest topology, etc.
 """
 
-from __future__ import division
-
 from onetree_common import Forest, Leaf
 from onetree_common import make_tree, print_tree
 
@@ -63,13 +61,13 @@ def main():
                       _tree7,
                       make_tree('X_1', [.2, .3], [Leaf(.1), Leaf(.25), Leaf(.65)])])
 
-    print '\n## Full Tree'
+    print('\n## Full Tree')
     print_tree(_forest)
 
-    print '\n## Simplified'
+    print('\n## Simplified')
     print_tree(simplify_greedy_runtime.simplify(_forest))
 
-    print '\n## Simplified with buckets'
+    print('\n## Simplified with buckets')
     bucket_size = 0.1
     print_tree(simplify_greedy_runtime.simplify(_forest, lambda x: int(x / bucket_size) * bucket_size))
 
