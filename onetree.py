@@ -53,7 +53,7 @@ def main():
 
     print('\n## Simplified with buckets')
     bucket_size = 0.1
-    print_tree(simplify_greedy_runtime.simplify(_forest, lambda x: int(x / bucket_size) * bucket_size))
+    print_tree(simplify_greedy_runtime.simplify(_forest, lambda x: int(x / bucket_size) * bucket_size, verbose_depth=2))
 
 if __name__ == '__main__':
     main()

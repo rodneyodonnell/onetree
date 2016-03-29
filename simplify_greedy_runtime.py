@@ -108,7 +108,7 @@ def filter_by_split(node, split):
         raise ValueError('Unexpected Value: %s', node)
 
 
-def simplify(forest, bucketize_fn=None, depth=0, verbose_depth=-1):
+def simplify(forest, bucketize_fn=None, depth=0, verbose_depth=-1, remaining=None):
     """Recursively simplify forest into a single tree."""
     weighted_splits = list(get_weighted_splits(forest))
 
@@ -119,14 +119,20 @@ def simplify(forest, bucketize_fn=None, depth=0, verbose_depth=-1):
     # Turn forest into a tree, where each child is a forest.
     splits = find_best_split(weighted_splits)
     if depth < verbose_depth:
+        if remaining is None:
+            remaining = [-1] * (verbose_depth + 1)
         print('\ndepth', depth)
         print('weighted_splits ', len(weighted_splits))
         print('\n'.join(str(s) for s in weighted_splits[:10]))
         print('splits', len(splits))
         print('\n'.join((str(s) for s in splits[:10])))
+        remaining[depth + 1] = len(splits)
+        remaining[depth] -= 1
+        print('remaining =', remaining)
 
-    children = [simplify(filter_by_split(forest, split), bucketize_fn, depth + 1, verbose_depth)
-                for split in splits]
+    children = []
+    for split in splits:
+        children.append(simplify(filter_by_split(forest, split), bucketize_fn, depth + 1, verbose_depth, remaining))
 
     splits, children = merge_buckets(splits, children, bucketize_fn)
     if len(splits) > 1:
